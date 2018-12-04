@@ -1,14 +1,36 @@
 require 'pry'
+# def overlapped_inches(inputs)
+#   usedInchArry = []
+#    # Iterate over each claim
+#   inputs.each do |input|
+#     # Determine the full range of the claim's width and the full range of the claims height
+#     (input[1]...(input[1] + input[3])).each do |width|
+#       (input[2]...(input[2] + input[4])).each do |height|
+#         # put all possible used inches wihin those ranges in an array
+#         usedInchArry << [width, height]
+#       end
+#     end
+#   end
+#   # take the array of all used inches
+#   # pull unique width and height coords
+#   # keep only the coords whose count within the initial array is greater than 1
+#   # return a count the remain coords
+#   usedInchArry.uniq.keep_if{|inch| usedInchArry.count(inch)>1}.count
+# end
 
 def overlapped_inches(inputs)
   usedInchArry = []
   repeats = []
+  # Iterate over each claim
   inputs.sort.each do |input|
+    # Determine the full range of the claim's width and the full range of the claims height
     (input[0]...(input[0] + input[2])).each do |width|
       (input[1]...(input[1] + input[3])).each do |height|
+        # If the range already exsits in usedInches add it to the repeats array
         if usedInchArry.include?([width, height])
           repeats << [width, height]
           print 'X'
+        # If not, add it to the usedInches Array
         else
           usedInchArry << [width, height]
           print '.'
@@ -16,6 +38,7 @@ def overlapped_inches(inputs)
       end
     end
   end
+  # return a unique count the repeats array
   repeats.uniq.count
 end
 
@@ -25,29 +48,3 @@ input = [[565,109, 14, 24], [413,723, 16, 28], [136,229, 27, 11], [640,187, 10, 
 input2 = [[1, 3, 4, 4], [3, 1, 4, 4], [5, 5, 2, 2]]
 
 print overlapped_inches(input)
-# print overlapped_inches(input2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def overlapped_inches(inputs)
-#   usedInchArry = []
-#   inputs.each do |input|
-#     (input[1]...(input[1] + input[3])).each do |width|
-#       (input[2]...(input[2] + input[4])).each do |height|
-#         usedInchArry << [width, height]
-#       end
-#     end
-#   end
-#   print usedInchArry.uniq.keep_if{|inch| usedInchArry.count(inch)>1}.count
-# end
