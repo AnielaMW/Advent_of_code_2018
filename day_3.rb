@@ -29,11 +29,9 @@ require 'pry'
 #         # If the range already exsits in usedInches add it to the repeats array
 #         if usedInchArry.include?([width, height])
 #           repeats << [width, height]
-#           print 'X'
 #         # If not, add it to the usedInches Array
 #         else
 #           usedInchArry << [width, height]
-#           print '.'
 #         end
 #       end
 #     end
