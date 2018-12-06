@@ -11,7 +11,8 @@ def operation_sleepy_guard(inputs)
   guard_list = guards_array(sorted_data).all
   set_sleeps(guard_list, sorted_data)
   guard = find_sleepy_guard(guard_list)
-  print "Guard: #{guard.id} slept #{guard.slept_most} at #{guard.minute_slept_most} guard_id * minute_asleep = #{guard.id.to_i * guard.minute_slept_most}"
+
+  print "Guard: #{guard.id} slept times #{guard.slept_most} at minute #{guard.minute_slept_most} guard_id * minute_asleep = #{guard.id.to_i * guard.minute_slept_most}"
 end
 
 class Guard
@@ -27,6 +28,10 @@ class Guard
 
   def add_sleep_to_minute(start, finish)
     (start..finish).each{|minute| @minutes[minute] += 1}
+  end
+
+  def total_time_asleep
+    @minutes.reduce(:+)
   end
 
   def slept_most
@@ -64,7 +69,7 @@ def set_sleeps(guard_list, sorted_data)
       guard_id = input.scan(/\#\d{1,}/)[0].scan(/\d{1,}/)[0]
     elsif input.include?('falls asleep')
       start = input.scan(/\:\d{2}/)[0].scan(/\d{1,}/)[0].to_i
-      stop = sorted_data[index+1].scan(/\:\d{2,}/)[0].scan(/\d{1,}/)[0].to_i
+      stop = sorted_data[index+1].scan(/\:\d{2,}/)[0].scan(/\d{1,}/)[0].to_i - 1
       guard = guard_list.find{|guard| guard.id == guard_id }
       guard.add_sleep_to_minute(start, stop)
     end
@@ -72,8 +77,28 @@ def set_sleeps(guard_list, sorted_data)
 end
 
 def find_sleepy_guard(guard_list)
-  guard_list.max_by{|guard| guard.slept_most}
+  guard_list.max_by{|guard| guard.total_time_asleep}
 end
+
+# inputs2 = "[1518-11-01 00:00] Guard #10 begins shift
+# [1518-11-01 00:05] falls asleep
+# [1518-11-01 00:25] wakes up
+# [1518-11-01 00:30] falls asleep
+# [1518-11-01 00:55] wakes up
+# [1518-11-01 23:58] Guard #99 begins shift
+# [1518-11-02 00:40] falls asleep
+# [1518-11-02 00:50] wakes up
+# [1518-11-03 00:05] Guard #10 begins shift
+# [1518-11-03 00:24] falls asleep
+# [1518-11-03 00:29] wakes up
+# [1518-11-04 00:02] Guard #99 begins shift
+# [1518-11-04 00:36] falls asleep
+# [1518-11-04 00:46] wakes up
+# [1518-11-05 00:03] Guard #99 begins shift
+# [1518-11-05 00:45] falls asleep
+# [1518-11-05 00:55] wakes up"
+#
+# operation_sleepy_guard(inputs2)
 
 inputs = "[1518-06-12 00:00] Guard #3359 begins shift
 [1518-10-08 00:19] wakes up
